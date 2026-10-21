@@ -1,20 +1,308 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+<ion-header class="ion-no-border">
+  <ion-toolbar color="danger">
+    <ion-buttons slot="start">
+      <ion-avatar class="header-logo">
+        <img src="assets/icono.png" alt="Logo Pokémon" />
+      </ion-avatar>
+    </ion-buttons>
+    <ion-title>PokéAPP</ion-title>
+    <ion-buttons slot="end" *ngIf="thisPokemon && seccionActiva === 'pokedex'">
+      <ion-button (click)="cerrarDetalle()">
+        <ion-icon name="close-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <ion-toolbar color="danger">
+    <ion-segment [value]="seccionActiva" (ionChange)="cambiarSeccion($event)">
+      <ion-segment-button value="pokedex">
+        <ion-label>Pokédex</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="batalla">
+        <ion-label>Batalla</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+
+  <!-- Buscador visible en la sección de Pokédex -->
+  <ion-toolbar color="danger" *ngIf="seccionActiva === 'pokedex'">
+    <ion-searchbar 
+      placeholder="Busca por nombre o ID (ej. Pikachu o 25)" 
+      [debounce]="700" 
+      (ionInput)="buscarPokemon($event)"
+      animated="true"
+      color="light">
+    </ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content color="light">
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+ 
+  <ng-container *ngIf="seccionActiva === 'pokedex'">
+    <!-- Indicador de Carga -->
+    <div class="center-content" *ngIf="isLoading">
+      <ion-spinner name="crescent" color="danger"></ion-spinner>
+      <p>Consultando la Pokédex...</p>
+    </div>
+
+    <!-- Mensaje de Error -->
+    <div class="center-content" *ngIf="errorMessage && !isLoading">
+      <ion-icon name="alert-circle-outline" color="medium" size="large"></ion-icon>
+      <p>{{ errorMessage }}</p>
+    </div>
+
+    <div *ngIf="thisPokemon && !isLoading" class="detail-container">
+      <ion-card class="pokemon-card">
+        
+        <!-- Contenedor de la Imagen Principal o GIF animado -->
+        <div class="image-bg">
+          <img 
+            [src]="showingGif && thisPokemon.gif ? thisPokemon.gif : selectedImage" 
+            [alt]="thisPokemon.name" 
+            class="pokemon-image" />
+        </div>
+
+        <div class="media-actions">
+          <ion-button 
+            *ngIf="thisPokemon.gif" 
+            size="small" 
+            [fill]="showingGif ? 'solid' : 'outline'" 
+            color="tertiary" 
+            shape="round" 
+            (click)="alternarGif()">
+            <ion-icon name="videocam-outline" slot="start"></ion-icon>
+            {{ showingGif ? 'Ver Imagen' : 'Ver GIF Animado' }}
+          </ion-button>
+
+          <ion-button 
+            *ngIf="thisPokemon.cry" 
+            size="small" 
+            fill="solid" 
+            color="danger" 
+            shape="round" 
+            (click)="reproducirSonido()">
+            <ion-icon name="volume-high" slot="start"></ion-icon>
+            Reproducir Grito
+          </ion-button>
+        </div>
+
+        <!-- GALERÍA DE MÁS DE 5 IMÁGENES (Nivel 2) -->
+        <div class="gallery-section" *ngIf="thisPokemon.gallery?.length">
+          <h4 class="section-subtitle">
+            <ion-icon name="images-outline"></ion-icon> Galería ({{ thisPokemon.gallery.length }} imágenes)
+          </h4>
+          <p class="gallery-hint">Toca una imagen para verla en grande:</p>
+          <div class="gallery-grid">
+            <div 
+              *ngFor="let item of thisPokemon.gallery" 
+              class="gallery-item" 
+              [class.active]="selectedImage === item.url && !showingGif"
+              (click)="seleccionarImagenGaleria(item.url)">
+              <img [src]="item.url" [alt]="item.label" />
+              <span class="gallery-label">{{ item.label }}</span>
+            </div>
+          </div>
+        </div>
+
+        <ion-card-header class="ion-text-center">
+          <ion-card-subtitle>#{{ thisPokemon.id | number:'3.0-0' }}</ion-card-subtitle>
+          <ion-card-title class="ion-text-capitalize title-name">{{ thisPokemon.name }}</ion-card-title>
+          
+          <!-- Tipos -->
+          <div class="types-container">
+            <ion-badge *ngFor="let type of thisPokemon.types" color="danger" class="ion-text-capitalize type-badge">
+              {{ type }}
+            </ion-badge>
+          </div>
+        </ion-card-header>
+
+        <ion-card-content>
+          <!-- Descripción -->
+          <p class="description-text">{{ thisPokemon.description }}</p>
+
+          <!-- Medidas Físicas -->
+          <ion-row class="ion-text-center measures-row ion-margin-bottom">
+            <ion-col>
+              <strong>{{ thisPokemon.weight }} kg</strong><br/>
+              <ion-text color="medium"><small>Peso</small></ion-text>
+            </ion-col>
+            <ion-col>
+              <strong>{{ thisPokemon.height }} m</strong><br/>
+              <ion-text color="medium"><small>Altura</small></ion-text>
+            </ion-col>
+          </ion-row>
+
+          <h3 class="stats-title">Estadísticas Base</h3>
+          <div *ngFor="let stat of thisPokemon.stats" class="stat-row">
+            <div class="stat-label ion-text-capitalize">{{ stat.name.replace('-', ' ') }}</div>
+            <div class="stat-value">{{ stat.value }}</div>
+            <div class="stat-bar">
+              <ion-progress-bar 
+                [value]="stat.normalized" 
+                [color]="stat.value > 80 ? 'success' : (stat.value > 49 ? 'warning' : 'danger')">
+              </ion-progress-bar>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <div *ngIf="!thisPokemon && !isLoading && !errorMessage" class="home-intro">
+      <div class="welcome-banner ion-text-center">
+        <img src="assets/icon-only.png" alt="Logo de inicio" class="welcome-logo" />
+        <h2>¡Bienvenido a la PokéAPP!</h2>
+        <p>Busca tu Pokémon por nombre o ID, o elige uno de la lista:</p>
+      </div>
+
+      <ion-grid>
+        <ion-row>
+          <ion-col size="6" size-md="4" size-lg="3" *ngFor="let p of pokemonList">
+            <ion-card button (click)="verDetalleDeLista(p.name)" class="list-card">
+              <ion-card-content class="ion-text-center ion-text-capitalize">
+                <ion-icon name="sparkles-outline" color="danger"></ion-icon>
+                <strong> {{ p.name }}</strong>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="seccionActiva === 'batalla'">
+    <div class="battle-container">
+      <div class="battle-header ion-text-center">
+        <h2> Arena de Combate Pokémon</h2>
+        <p>Elige 2 contrincantes para comparar sus estadísticas y simular una pelea épica.</p>
+      </div>
+
+      <div class="quick-picks ion-text-center">
+        <ion-text color="medium"><small>Selección rápida:</small></ion-text>
+        <div class="chips-row">
+          <ion-badge 
+            *ngFor="let sug of sugerenciasPelea" 
+            color="light" 
+            class="pick-badge"
+            (click)="!luchador1 ? cargarLuchador(1, sug) : cargarLuchador(2, sug)">
+            + {{ sug }}
+          </ion-badge>
+        </div>
+      </div>
+
+      <ion-row class="fighters-row">
+        <!-- LUCHADOR 1 -->
+        <ion-col size="12" size-md="6">
+          <ion-card class="fighter-card" [class.winner-card]="ganador === luchador1">
+            <ion-card-header class="ion-text-center">
+              <ion-badge color="danger">Luchador 1</ion-badge>
+              <ion-searchbar 
+                placeholder="Nombre (ej. charizard)" 
+                [debounce]="600" 
+                (ionInput)="cargarLuchador(1, $event.target.value || '')"
+                [value]="luchador1?.name || ''">
+              </ion-searchbar>
+            </ion-card-header>
+
+            <ion-card-content class="ion-text-center">
+              <ion-spinner *ngIf="cargandoLuchador1" name="crescent" color="danger"></ion-spinner>
+              
+              <div *ngIf="luchador1 && !cargandoLuchador1">
+                <img [src]="luchador1.image" [alt]="luchador1.name" class="fighter-sprite" />
+                <h3 class="ion-text-capitalize fighter-name">{{ luchador1.name }}</h3>
+
+                <!-- Stats del Luchador 1 -->
+                <div class="fighter-stats">
+                  <p><ion-icon name="heart-outline" color="danger"></ion-icon> HP: <strong>{{ luchador1.hp }}</strong></p>
+                  <p><ion-icon name="flame-outline" color="warning"></ion-icon> Ataque: <strong>{{ luchador1.attack }}</strong></p>
+                  <p><ion-icon name="shield-outline" color="primary"></ion-icon> Defensa: <strong>{{ luchador1.defense }}</strong></p>
+                  <p><ion-icon name="speedometer-outline" color="success"></ion-icon> Velocidad: <strong>{{ luchador1.speed }}</strong></p>
+                </div>
+              </div>
+
+              <div *ngIf="!luchador1 && !cargandoLuchador1" class="empty-fighter">
+                <p>Escribe un nombre o toca una sugerencia arriba.</p>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+
+        <ion-col size="12" size-md="6">
+          <ion-card class="fighter-card" [class.winner-card]="ganador === luchador2">
+            <ion-card-header class="ion-text-center">
+              <ion-badge color="tertiary">Luchador 2</ion-badge>
+              <ion-searchbar 
+                placeholder="Nombre (ej. blastoise)" 
+                [debounce]="600" 
+                (ionInput)="cargarLuchador(2, $event.target.value || '')"
+                [value]="luchador2?.name || ''">
+              </ion-searchbar>
+            </ion-card-header>
+
+            <ion-card-content class="ion-text-center">
+              <ion-spinner *ngIf="cargandoLuchador2" name="crescent" color="tertiary"></ion-spinner>
+
+              <div *ngIf="luchador2 && !cargandoLuchador2">
+                <img [src]="luchador2.image" [alt]="luchador2.name" class="fighter-sprite" />
+                <h3 class="ion-text-capitalize fighter-name">{{ luchador2.name }}</h3>
+
+                <!-- Stats del Luchador 2 -->
+                <div class="fighter-stats">
+                  <p><ion-icon name="heart-outline" color="danger"></ion-icon> HP: <strong>{{ luchador2.hp }}</strong></p>
+                  <p><ion-icon name="flame-outline" color="warning"></ion-icon> Ataque: <strong>{{ luchador2.attack }}</strong></p>
+                  <p><ion-icon name="shield-outline" color="primary"></ion-icon> Defensa: <strong>{{ luchador2.defense }}</strong></p>
+                  <p><ion-icon name="speedometer-outline" color="success"></ion-icon> Velocidad: <strong>{{ luchador2.speed }}</strong></p>
+                </div>
+              </div>
+
+              <div *ngIf="!luchador2 && !cargandoLuchador2" class="empty-fighter">
+                <p>Escribe un nombre o toca una sugerencia arriba.</p>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+
+      <div class="battle-actions ion-text-center ion-padding">
+        <ion-button 
+          expand="block" 
+          size="large" 
+          color="warning" 
+          shape="round" 
+          [disabled]="!luchador1 || !luchador2 || peleando" 
+          (click)="iniciarPelea()">
+          <ion-icon name="flash-outline" slot="start"></ion-icon>
+          {{ peleando ? '¡Combatiendo en la arena...!' : '¡Simular Pelea!' }}
+        </ion-button>
+
+        <ion-button 
+          *ngIf="luchador1 || luchador2" 
+          fill="clear" 
+          color="medium" 
+          size="small" 
+          (click)="reiniciarPelea()">
+          <ion-icon name="refresh-outline" slot="start"></ion-icon>
+          Reiniciar Arena
+        </ion-button>
+      </div>
+
+      <ion-card *ngIf="resultadoBatalla" class="winner-announcement ion-text-center">
+        <ion-card-content>
+          <div></div>
+          <h2>{{ resultadoBatalla }}</h2>
+          <ion-button 
+            *ngIf="ganador?.cry" 
+            size="small" 
+            color="success" 
+            shape="round" 
+            (click)="reproducirSonido(ganador.cry)">
+            <ion-icon name="volume-high" slot="start"></ion-icon>
+            Grito de Victoria
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+
+    </div>
+  </ng-container>
+
 </ion-content>
