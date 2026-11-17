@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 
-<<<<<<< HEAD
 def keystorePropertiesFile = rootProject.file("keystore.properties")
 def keystoreProperties = new Properties()
 if (keystorePropertiesFile.exists()) {
@@ -16,17 +15,6 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0.0"
-=======
-android {
-    namespace = "io.ionic.starter"
-    compileSdk = rootProject.ext.compileSdkVersion
-    defaultConfig {
-        applicationId "io.ionic.starter"
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
->>>>>>> 45469ed505be15394bc10d450b8aa505249710df
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
@@ -34,7 +22,6 @@ android {
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
-<<<<<<< HEAD
     signingConfigs {
         release {
             if (keystorePropertiesFile.exists()) {
@@ -48,10 +35,6 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.release
-=======
-    buildTypes {
-        release {
->>>>>>> 45469ed505be15394bc10d450b8aa505249710df
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
