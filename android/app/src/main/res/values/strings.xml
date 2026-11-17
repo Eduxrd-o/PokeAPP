@@ -1,7 +1,14 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
+<<<<<<< HEAD
     <string name="app_name">PokéAPP</string>
     <string name="title_activity_main">PokéAPP</string>
     <string name="package_name">ec.edu.epn.pokeapp</string>
     <string name="custom_url_scheme">ec.edu.epn.pokeapp</string>
+=======
+    <string name="app_name">PokeAPP</string>
+    <string name="title_activity_main">PokeAPP</string>
+    <string name="package_name">io.ionic.starter</string>
+    <string name="custom_url_scheme">io.ionic.starter</string>
+>>>>>>> 45469ed505be15394bc10d450b8aa505249710df
 </resources>
