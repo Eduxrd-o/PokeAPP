@@ -1,7 +1,0 @@
-{
-  "name": "explorer",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "angular-standalone"
-}

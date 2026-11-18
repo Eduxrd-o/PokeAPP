@@ -1,7 +1,0 @@
-{
-  "name": "TalentFlow",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "angular-standalone"
-}

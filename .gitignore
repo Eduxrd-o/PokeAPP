@@ -1,123 +1,80 @@
-# Compiled class files
-*.class
+# Specifies intentionally untracked files to ignore when using Git
+# http://git-scm.com/docs/gitignore
 
-# Package Files
-*.jar
-*.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
+*~
+*.sw[mnpcod]
+.tmp
+*.tmp
+*.tmp.*
+UserInterfaceState.xcuserstate
+$RECYCLE.BIN/
 
-# Node dependencies
-node_modules/
-**/node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+*.log
+log.txt
 
-# Angular & Ionic build output / caches
-.angular/
-**/.angular/
-www/
-**/www/
-dist/
-**/dist/
-out-tsc/
-**/out-tsc/
-.ionic/
-**/.ionic/
 
-# Firebase cache & debug
-.firebase/
-**/.firebase/
-firebase-debug.log*
-firestore-debug.log*
-ui-debug.log*
+/.sourcemaps
+/.versions
+/coverage
 
-# Mobile platforms & builds
-android/
-**/android/
-ios/
-**/ios/
-.gradle/
-**/.gradle/
-local.properties
-*.apk
+# Ionic
+/.ionic
+/www
+/platforms
+/plugins
 
-# Test coverage & reports
-coverage/
-**/coverage/
-test-results/
-playwright-report/
-blob-report/
-playwright/.cache/
+# Compiled output
+/dist
+/tmp
+/out-tsc
+/bazel-out
+
+# Node
+/node_modules
+npm-debug.log
+yarn-error.log
 
 # IDEs and editors
 .idea/
-*.iml
-*.iws
-*.ipr
-out/
-.vscode/
-*.code-workspace
-.history/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
 *.sublime-project
 *.sublime-workspace
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+
+# Miscellaneous
+/.angular
+/.angular/cache
+.sass-cache/
+/.nx
+/.nx/cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+testem.log
+/typings
 
 # System files
 .DS_Store
 Thumbs.db
 
-# Environment variables
-.env
-.env.*
-!.env.example
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
 
-# Projects by Week/Class (explicit mappings)
-/src/Semana_01/Clase_01/node_modules
-/src/Semana_01/Clase_01/CV/node_modules
-/src/Semana_02/Clase_02/node_modules
-/src/Semana_02/Clase_02/multiplos/android
-/src/Semana_02/Clase_02/multiplos/node_modules
-/src/Semana_02/Clase_03/node_modules
-/src/Semana_02/Clase_03/contador/android
-/src/Semana_02/Clase_03/contador/node_modules
-/src/Semana_02/Clase_03/producto/android
-/src/Semana_02/Clase_03/producto/node_modules
-/src/Semana_03/Clase_04/node_modules
-/src/Semana_03/Clase_04/photo-gallery/android
-/src/Semana_03/Clase_04/photo-gallery/node_modules
-/src/Semana_03/Clase_05/node_modules
-/src/Semana_03/Clase_05/gps/android
-/src/Semana_03/Clase_05/gps/node_modules
-/src/Semana_04/Clase_06/node_modules
-/src/Semana_04/Clase_06/poke/android
-/src/Semana_04/Clase_06/poke/node_modules
-/src/Semana_04/Clase_07/node_modules
-/src/Semana_04/Clase_07/explorer/android
-/src/Semana_04/Clase_07/explorer/node_modules
-/src/Semana_05/Clase_08/node_modules
-/src/Semana_05/Clase_08/municipio/android
-/src/Semana_05/Clase_08/municipio/node_modules
-/src/Semana_05/Clase_09/node_modules
-/src/Semana_05/Clase_09/municipio/android
-/src/Semana_05/Clase_09/municipio/node_modules
-/src/Semana_06/Clase_10/node_modules
-/src/Semana_06/Clase_10/hello-firebase/android
-/src/Semana_06/Clase_10/hello-firebase/node_modules
-/src/Semana_06/Clase_10/hello-firebase/.firebase
-/src/Semana_07/Clase_12/node_modules
-/src/Semana_07/Clase_12/TalentFlow/android
-/src/Semana_07/Clase_12/TalentFlow/node_modules
-/src/Semana_07/Clase_12/TalentFlow/.firebase
-/src/Semana_07/Clase_13/node_modules
-/src/Semana_07/Clase_13/ionic-sensores/android
-/src/Semana_07/Clase_13/ionic-sensores/node_modules
-
-# APKs de entrega (excepciones a *.apk)
-!/src/Semana_05/Clase_08/app-debug.apk
-!/src/Semana_05/Clase_09/debug.apk
-!/src/Semana_06/Clase_11/debug.apk
-!/src/Semana_07/Clase_12/TalentFlow/app-debug.apk
+# Android Release Signing
+android/keystore.properties
+android/keystore/

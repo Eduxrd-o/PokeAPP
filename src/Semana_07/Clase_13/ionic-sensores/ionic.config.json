@@ -1,7 +1,0 @@
-{
-  "name": "ionic-sensores",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "angular-standalone"
-}
