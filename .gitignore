@@ -112,6 +112,9 @@ Thumbs.db
 /src/Semana_07/Clase_12/TalentFlow/android
 /src/Semana_07/Clase_12/TalentFlow/node_modules
 /src/Semana_07/Clase_12/TalentFlow/.firebase
+/src/Semana_07/Clase_13/node_modules
+/src/Semana_07/Clase_13/ionic-sensores/android
+/src/Semana_07/Clase_13/ionic-sensores/node_modules
 
 # APKs de entrega (excepciones a *.apk)
 !/src/Semana_05/Clase_08/app-debug.apk
